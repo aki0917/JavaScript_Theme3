@@ -29,14 +29,35 @@ const createTaskObject = comment => {
 
 // HTMLにタスクを追加
 const appendTaskToHTML = newTask => {
-  taskList.innerHTML += `
+  const row = document.createElement('tr');
+  row.innerHTML = `
     <tr>
       <td>${newTask.id}</td>
       <td>${newTask.comment}</td>
       <td>${newTask.status}</td>
-      <td><button>削除</button></td>
     </tr>
   `;
+  
+  const deleteButton = document.createElement('button');
+  deleteButton.innerText = '削除';
+
+  deleteButton.addEventListener('click', () => {
+    const index = tasks.findIndex(task => task.id === newTask.id);
+    tasks.splice(index, 1);
+    updateIds();
+    row.remove();
+  });
+
+  row.appendChild(deleteButton);
+  taskList.appendChild(row);
+
+};
+
+// IDの更新
+const updateIds = () => {
+  tasks.forEach((task, index) => {
+    task.id = index + 1;
+  });
 };
 
 // イベント
