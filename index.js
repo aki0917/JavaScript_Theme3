@@ -38,6 +38,9 @@ const appendTaskToHTML = newTask => {
     </tr>
   `;
   
+  const statusButton = createStatusButton(newTask, row);
+  row.appendChild(statusButton);
+
   const deleteButton = document.createElement('button');
   deleteButton.innerText = '削除';
 
@@ -58,6 +61,18 @@ const updateIds = () => {
   tasks.forEach((task, index) => {
     task.id = index + 1;
   });
+};
+
+// 状態変更ボタンを作成する関数
+const createStatusButton = (newTask, row) => {
+  const statusButton = document.createElement('button');
+  statusButton.innerText = newTask.status === '作業中' ? '完了' : '作業中';
+
+  statusButton.addEventListener('click', () => {
+    newTask.status = newTask.status === '作業中' ? '完了' : '作業中';
+    row.children[2].innerText = newTask.status;
+  });
+  return statusButton;
 };
 
 // イベント
