@@ -70,9 +70,18 @@ const createStatusButton = (newTask, row) => {
 
   statusButton.addEventListener('click', () => {
     newTask.status = newTask.status === '作業中' ? '完了' : '作業中';
-    row.children[2].innerText = newTask.status;
+    redrawTasks(); 
   });
   return statusButton;
+};
+
+// タスクの再描画
+const redrawTasks = () => {
+  taskList.innerHTML = '';
+
+  tasks.forEach(task => {
+    appendTaskToHTML(task);
+  });
 };
 
 // イベント
