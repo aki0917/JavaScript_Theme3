@@ -14,7 +14,7 @@ const addTask = () => {
   if (!task) return; //入力されていなければ処理を終了
   const newTask = createTaskObject(task);
   tasks.push(newTask); 
-  appendTaskToHTML(newTask); 
+  filterTasks();
   taskInput.value = '';  
 };
 
@@ -31,11 +31,9 @@ const createTaskObject = comment => {
 const appendTaskToHTML = newTask => {
   const row = document.createElement('tr');
   row.innerHTML = `
-    <tr>
-      <td>${newTask.id}</td>
-      <td>${newTask.comment}</td>
-      <td>${newTask.status}</td>
-    </tr>
+    <td>${newTask.id}</td>
+    <td>${newTask.comment}</td>
+    <td>${newTask.status}</td>
   `;
   
   const statusButton = createStatusButton(newTask, row);
@@ -47,14 +45,16 @@ const appendTaskToHTML = newTask => {
   deleteButton.addEventListener('click', () => {
     const index = tasks.findIndex(task => task.id === newTask.id);
     tasks.splice(index, 1);
+
     updateIds();
     row.remove();
+    filterTasks();
   });
 
   row.appendChild(deleteButton);
   taskList.appendChild(row);
-
 };
+
 
 // IDの更新
 const updateIds = () => {
@@ -70,19 +70,53 @@ const createStatusButton = (newTask, row) => {
 
   statusButton.addEventListener('click', () => {
     newTask.status = newTask.status === '作業中' ? '完了' : '作業中';
-    redrawTasks(); 
+
+    
+    filterTasks();
   });
   return statusButton;
 };
 
 // タスクの再描画
-const redrawTasks = () => {
-  taskList.innerHTML = '';
-
-  tasks.forEach(task => {
-    appendTaskToHTML(task);
+const redrawTasks = (filteredTasks) => {
+    taskList.innerHTML = ''; 
+  
+  filteredTasks.forEach(task => {
+    appendTaskToHTML(task,taskList);
   });
 };
+
+//タスクによって表示を変える
+const filterTasks = () => {
+  const statusRadioButtons = document.getElementsByName('status');
+  
+  // 選択されているラジオボタンの値を取得
+  let selectedStatus = '';
+  statusRadioButtons.forEach(radio => {
+    if (radio.checked) selectedStatus = radio.value;
+  });
+
+  //タスクのリストを作成
+  const filteredTasks = [];
+  
+  // タスクの状態によって絞り込み
+  tasks.forEach(task => {
+    if (selectedStatus === '全て') {
+      filteredTasks.push(task);
+    } else if (task.status === selectedStatus) {
+      filteredTasks.push(task);
+    }
+  });
+
+  redrawTasks(filteredTasks);
+};
+
+//ラジオボタンの変更
+const statusRadio = document.getElementsByName('status');
+
+statusRadio.forEach(radio => {
+  radio.addEventListener('change', filterTasks);
+});
 
 // イベント
 addButton.addEventListener('click', (event) => {
