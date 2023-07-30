@@ -14,6 +14,7 @@ const addTask = () => {
   if (!task) return; //入力されていなければ処理を終了
   const newTask = createTaskObject(task);
   tasks.push(newTask); 
+  updateIds();
   filterTasks();
   taskInput.value = '';  
 };
@@ -21,7 +22,7 @@ const addTask = () => {
 // タスクオブジェクトの作成
 const createTaskObject = comment => {
   return {
-    id: tasks.length,
+    id: tasks.length + 1,
     comment,
     status: '作業中'
   };
