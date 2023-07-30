@@ -9,16 +9,24 @@
 <body>
   <h1>TODOリスト</h1>
 
-  <table id="task-list">
+  <div id="radio-buttons">
+    <input type="radio" id="all" name="status" value="全て" checked>
+    <label for="all">全て</label>
+    <input type="radio" id="working" name="status" value="作業中">
+    <label for="working">作業中</label>
+    <input type="radio" id="done" name="status" value="完了">
+    <label for="done">完了</label>
+  </div>
+
+  <table>
     <thead>
       <tr>
         <th>ID</th>
         <th>コメント</th>
         <th>状態</th>
-        <th>操作</th>
       </tr>
     </thead>
-    <tbody>
+    <tbody id="task-list">
       
     </tbody>
   </table>
